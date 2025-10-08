@@ -1,7 +1,7 @@
-<?php loadPartials('head') ?>
-<?php loadPartials('navbar') ?>
-<?php loadPartials('showcase-search') ?>
-<?php loadPartials('top-banner') ?>
+<?= loadPartials('head') ?>
+<?= loadPartials('navbar') ?>
+<?= loadPartials('showcase-search') ?>
+<?= loadPartials('top-banner') ?>
 
     <!-- Job Listings -->
     <section>
@@ -169,11 +169,11 @@
                     </div>
                 </div>
             </div>
-            <a href="listings.html" class="block text-xl text-center">
+            <a href="/listings" class="block text-xl text-center">
                 <i class="fa fa-arrow-alt-circle-right"></i>
                 Show All Jobs
             </a>
     </section>
 
-<?php loadPartials('bottom-banner') ?>
-<?php loadPartials('footer') ?>
+<?= loadPartials('bottom-banner') ?>
+<?= loadPartials('footer') ?>
