@@ -1,3 +1,3 @@
 <?php
 
-echo "Listings create Controller";
+loadView('listings/create');
