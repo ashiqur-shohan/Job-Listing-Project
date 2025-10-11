@@ -1,7 +1,17 @@
 <?php
 
+// A Router class to handle HTTP requests and route them to the appropriate controller.
 class Router{
+    // Store all registered routes
     protected $routes = [];
+
+    /**
+     *  Register a new route
+     * @param string $method
+     * @param string $uri
+     * @param string $controller
+     * @return void
+     */
     public function registeredRoutes ($method, $uri, $controller){
         $this->routes[] = [
             'method' => $method,
@@ -58,6 +68,19 @@ class Router{
     }
 
     /**
+     * Load the error page
+     * 
+     * @param int $httpCode
+     * @retun void
+     */
+    public function error($httpCode = 404){
+        http_response_code($httpCode);
+        loadView("error/{$httpCode}");
+        exit;
+    }
+
+
+    /**
      * Routing the request
      * 
      * @param string $uri
@@ -67,12 +90,19 @@ class Router{
     public function route($uri, $method){
         // loops through all registered routes.
         foreach($this->routes as $route){
+
             // checks if the route matches the request URI and method.
-            if($route['uri'] === $uri && $route['method'] === $method){
-                
+            if($route['uri'] === $uri && $route['method'] === $method){    
+
+                // If a match is found, it includes the corresponding controller file.
                 require basePath($route['controller']);
+
+                // Stop further execution
                 return;
             }
         }
+
+        // If no route matches, send a error response.
+        $this->error();
     }
 }
