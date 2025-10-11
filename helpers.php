@@ -21,10 +21,12 @@ function basePath($path = ''){
  * @return void
  */
 
-function loadView($name) {
+function loadView($name, $data = []) {
     $viewPath = basePath("views/{$name}.php");
 
     if(file_exists($viewPath)){
+        // Extract variables from the data array to be used in the view
+        extract($data);
         require $viewPath;
     }
     else{
@@ -78,4 +80,14 @@ function inspectAndDie($value){
     
     // immediately terminate the execution of the current script
     die();
+}
+
+/**
+ * Format Salary
+ * 
+ * @param string $salary
+ * @return string Formatted Salary
+ */
+function formatSalary($salary){
+    return '$' . number_format(($salary));
 }
