@@ -1,0 +1,16 @@
+{
+  "name": "ashiqur-shohan/job-listing-project",
+  "description": "Job Listing application",
+  "authors": [
+    {
+        "name" : "Ashiqur Rahman Shohan",
+        "email" : "ashiqur.shohan@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+        "Framework\\": "Framework/",
+        "App\\": "App/"
+    }
+  }
+}

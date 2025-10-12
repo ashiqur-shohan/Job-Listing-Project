@@ -1,5 +1,7 @@
 <?php
 
+namespace Framework;
+
 // A Router class to handle HTTP requests and route them to the appropriate controller.
 class Router{
     // Store all registered routes
@@ -9,14 +11,17 @@ class Router{
      *  Register a new route
      * @param string $method
      * @param string $uri
-     * @param string $controller
+     * @param string $action
      * @return void
      */
-    public function registeredRoutes ($method, $uri, $controller){
+    public function registerRoute ($method, $uri, $action){
+        list($controller, $controllerMethod) = explode('@', $action);
+        
         $this->routes[] = [
             'method' => $method,
             'uri' => $uri,
-            'controller' => $controller
+            'controller' => $controller,
+            'controllerMethod' => $controllerMethod
         ];
     }
 
@@ -28,7 +33,7 @@ class Router{
      * @return void
      */
     public function get($uri, $controller){
-        $this->registeredRoutes('GET', $uri, $controller);
+        $this->registerRoute('GET', $uri, $controller);
     }
 
     /**
@@ -40,7 +45,7 @@ class Router{
      */
     public function post($uri, $controller)
     {
-        $this->registeredRoutes('POST', $uri, $controller);
+        $this->registerRoute('POST', $uri, $controller);
     }
 
     /**
@@ -52,7 +57,7 @@ class Router{
      */
     public function put($uri, $controller)
     {
-        $this->registeredRoutes('PUT', $uri, $controller);
+        $this->registerRoute('PUT', $uri, $controller);
     }
 
     /**
@@ -64,7 +69,7 @@ class Router{
      */
     public function delete($uri, $controller)
     {
-        $this->registeredRoutes('DELETE', $uri, $controller);
+        $this->registerRoute('DELETE', $uri, $controller);
     }
 
     /**
@@ -81,7 +86,7 @@ class Router{
 
 
     /**
-     * Routing the request
+     * Route the request
      * 
      * @param string $uri
      * @param string $method
@@ -94,8 +99,13 @@ class Router{
             // checks if the route matches the request URI and method.
             if($route['uri'] === $uri && $route['method'] === $method){    
 
-                // If a match is found, it includes the corresponding controller file.
-                require basePath('App/' . $route['controller']);
+                // Extract controller and method
+                $controller = 'App\\Controllers\\' . $route['controller'];
+                $controllerMethod = $route['controllerMethod'];
+                
+                // Instantiate the controller and call the method
+                $controllerInstance = new $controller();
+                $controllerInstance->$controllerMethod();
 
                 // Stop further execution
                 return;
