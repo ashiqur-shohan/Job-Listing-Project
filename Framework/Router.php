@@ -95,7 +95,7 @@ class Router{
             if($route['uri'] === $uri && $route['method'] === $method){    
 
                 // If a match is found, it includes the corresponding controller file.
-                require basePath($route['controller']);
+                require basePath('App/' . $route['controller']);
 
                 // Stop further execution
                 return;
