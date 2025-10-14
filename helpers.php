@@ -102,3 +102,14 @@ function formatSalary($salary){
 function sanitize($input){
     return filter_var(trim($input), FILTER_SANITIZE_SPECIAL_CHARS);
 }
+
+/**
+ * Redirect to a given URL
+ * 
+ * @param string $url
+ * @return void
+ */
+function redirect($url){
+    header("Location: {$url}");
+    exit;
+}
