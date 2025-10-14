@@ -85,9 +85,14 @@ class Router
      */
     public function route($uri)
     {
-
         //Get http Method
         $requestMethod = $_SERVER['REQUEST_METHOD'];
+
+        // check for _method input
+        if ($requestMethod === "POST" && isset($_POST['_method'])){
+            // Override the request method
+            $requestMethod = strtoupper($_POST['_method']);
+        }
 
         // loops through all registered routes.
         foreach ($this->routes as $route) {
