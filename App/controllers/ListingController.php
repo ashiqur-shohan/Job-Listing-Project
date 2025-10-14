@@ -24,7 +24,7 @@ class ListingController
     public function index()
     {
 
-        $listings = $this->db->query("SELECT * FROM listings")->fetchAll();
+        $listings = $this->db->query("SELECT * FROM listings ORDER BY created_at DESC")->fetchAll();
 
         loadView('listings/index', ['listings' => $listings]);
     }
@@ -42,6 +42,7 @@ class ListingController
     /**
      * Show Single Listing
      * 
+     * @param array $params
      * @return void
      */
     public function show($params)
@@ -92,7 +93,7 @@ class ListingController
         $newListingData = array_map('sanitize', $newListingData);
 
         // These fields are required
-        $requiredFields = ['title', 'description', 'email', 'city', 'state'];
+        $requiredFields = ['title', 'description', 'salary', 'email', 'city', 'state'];
         $errors = [];
 
         foreach ($requiredFields as $field) {
@@ -109,7 +110,56 @@ class ListingController
             ]);
         } else {
             // Insert the new listing into the database
-            echo 'Success';
+
+
+            foreach ($newListingData as $field => $value) {
+                $fields[] = $field;
+            }
+            $fields = implode(', ', $fields);
+
+            $values = [];
+            foreach ($newListingData as $field => $value) {
+                // Convert empty strings to NULL
+                if ($value === '') {
+                    $newListingData[$field] = null;
+                }
+
+                $values[] = ':' . $field;
+            }
+
+            $values = implode(', ', $values);
+
+            $query = "INSERT INTO listings ({$fields}) VALUES ({$values})";
+
+            $this->db->query($query, $newListingData);
+
+            // Redirect to listings page after successful insertion
+            redirect('/listings');
         }
+    }
+
+    /**
+     * Delete a Listing
+     * 
+     * @param array $params
+     * @return void
+     */
+    public function destroy($params)
+    {
+        $id = $params['id'];
+        $params = [
+            'id' => $id
+        ];
+
+        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $params)->fetch();
+
+        if(!$listing){
+            ErrorController::notFound("Listing not found");
+            return;
+        }
+
+        $this->db->query('DELETE FROM listings WHERE id = :id', $params);
+        // Redirect to listings page after deletion
+        redirect('/listings');
     }
 }
