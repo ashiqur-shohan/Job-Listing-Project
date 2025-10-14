@@ -91,3 +91,14 @@ function inspectAndDie($value){
 function formatSalary($salary){
     return '$' . number_format(($salary));
 }
+
+/**
+ * Sanitize Input
+ * 
+ * @param string $input
+ * @return string 
+ */
+
+function sanitize($input){
+    return filter_var(trim($input), FILTER_SANITIZE_SPECIAL_CHARS);
+}
